@@ -63,8 +63,15 @@ module.exports = function() {
 				return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 			}
 
-			// all is well, return successful user
-			return done(null, user);
+			// user found - first update lastAccessed date
+			user.local.lastAccessed = new Date();
+			user.save(function(err) {
+				if (err) {
+					throw err;
+				}
+				// return successful user
+				return done(null, user);
+			});
 		});
 	}));
 
@@ -102,6 +109,7 @@ module.exports = function() {
 					// set the user's local credentials
 					newUser.local.email    = email;
 					newUser.local.password = newUser.generateHash(password);
+					newUser.local.created = newUser.local.lastAccessed = new Date();
 
 					// save the user
 					newUser.save(function(err) {
