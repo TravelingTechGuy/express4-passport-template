@@ -7,7 +7,7 @@ The project also uses debug, models, and separate routers.
 To use this template, follow these steps:
 
 	$ git clone https://github.com/TravelingTechGuy/express4-passport-template.git
-	$ cd ./express4-passport-template.git
+	$ cd ./express4-passport-template
 	$ npm install
 	$ node app
 
