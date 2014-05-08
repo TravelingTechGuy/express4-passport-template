@@ -31,3 +31,5 @@ Main features of this template:
 6. Errors router
 7. Errors returned in JSON format if the request header contains `Accept: application/json`
 8. Separate debug calls in every module - run `npm start` to get all debug messages
+
+The template is based on my [initial Express4 template](https://github.com/TravelingTechGuy/express4-template.git) and the article by Chris Sevilleja on [Scotch.io](http://scotch.io/tutorials/javascript/easy-node-authentication-setup-and-local).
