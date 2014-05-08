@@ -17,9 +17,17 @@ var express = require('express'),
 
 //regular modules
 var path = require('path'),
-	flash = require('connect-flash'),
-	passport = require('./config/passport')(),	// pass passport for configuration
-	db = require('./config/database')();			// connect to our database
+	flash = require('connect-flash'),			//session flash messages
+	mongoose = require('mongoose'),
+	dbConfig = require('./config/database'),
+	passport = require('./config/passport')();	// configure passport
+
+// connect to database
+mongoose.connect(dbConfig.url);
+mongoose.connection.on('error', function(err) {
+	console.error('Mongoose connection error: ' + err.message);
+	process.exit(-1);
+});
 
 //all environments
 app.set('port', process.env.PORT || 3000);								//app port
@@ -34,8 +42,8 @@ app.use(bodyParser.urlencoded());										//parse body POST requests
 app.use(cookieParser());												//parse cookies in header
 app.use(session({secret: 'keyboard cat'}));								//set session with secret
 app.use(flash());														//use session flash, to transfer messages
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize());											//intialize Passport middleware
+app.use(passport.session());											//Passport session support
 app.use(methodOverride());												//simulate DELETE and PUT
 app.disable('x-powered-by');											//remove Express from return header
 
