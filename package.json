@@ -1,0 +1,27 @@
+{
+  "name": "Express-Passport",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "DEBUG=* node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "app.js",
+  "dependencies": {
+    "bcrypt-nodejs": "latest",
+    "body-parser": "latest",
+    "compression": "latest",
+    "connect-flash": "latest",
+    "cookie-parser": "latest",
+    "debug": "latest",
+    "ejs": "latest",
+    "express": "~4.0.0",
+    "express-session": "latest",
+    "method-override": "latest",
+    "mongoose": "^3.8.8",
+    "morgan": "latest",
+    "passport": "latest",
+    "passport-local": "latest",
+    "static-favicon": "latest"
+  }
+}
