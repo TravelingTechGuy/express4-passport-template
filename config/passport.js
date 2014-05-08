@@ -50,6 +50,7 @@ module.exports = function() {
 		userModel.findOne({ 'local.email' :  email }, function(err, user) {
 			// if there are any errors, return the error before anything else
 			if (err) {
+				debug(err);
 				return done(err);
 			}
 
@@ -70,6 +71,7 @@ module.exports = function() {
 					throw err;
 				}
 				// return successful user
+				debug('user %s logged in', user.id);
 				return done(null, user);
 			});
 		});
@@ -116,6 +118,7 @@ module.exports = function() {
 						if (err) {
 							throw err;
 						}
+						debug('user %s signed up', user.id);
 						return done(null, newUser);
 					});
 				}
@@ -123,5 +126,18 @@ module.exports = function() {
 		});
 	}));
 	
+	passport.logout = function(req, done) {
+		userModel.findById(req.user.id, function(err, user) {
+			//try to update last accessed time, ignore on failure;
+			if(!err) {
+				user.local.lastAccessed = new Date();
+				user.save();
+			}
+			debug("user id %s logged out", req.user.id);
+			req.logout();
+			done();
+		});
+	};
+
 	return passport;
 };

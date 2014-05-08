@@ -56,8 +56,9 @@ module.exports = function(passport) {
 	// LOGOUT ==============================
 	// =====================================
 	router.get('/logout', function(req, res) {
-		req.logout();
-		res.redirect('/');
+		passport.logout(req, function() {
+			res.redirect('/');
+		});
 	});
 
 	// route middleware to make sure a user is logged in
