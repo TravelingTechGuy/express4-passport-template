@@ -4,7 +4,7 @@
 
 'use strict';
 
-//express 4 and new modules
+//express 4 and modules
 var express = require('express'),
 	app = express(),
 	favicon = require('static-favicon'),
@@ -18,11 +18,11 @@ var express = require('express'),
 //regular modules
 var path = require('path'),
 	flash = require('connect-flash'),			//session flash messages
-	mongoose = require('mongoose'),
-	dbConfig = require('./config/database'),
-	passport = require('./config/passport')();	// configure passport
+	passport = require('./config/passport')(),	//configure passport
+	mongoose = require('mongoose'),				//configure database
+	dbConfig = require('./config/database');	
 
-// connect to database
+// connect to database - exit with error message on failure
 mongoose.connect(dbConfig.url);
 mongoose.connection.on('error', function(err) {
 	console.error('Mongoose connection error: ' + err.message);
@@ -40,7 +40,7 @@ app.use(compress());													//gzip
 app.use(bodyParser.json());												//parse body json POST requests
 app.use(bodyParser.urlencoded());										//parse body POST requests
 app.use(cookieParser());												//parse cookies in header
-app.use(session({secret: 'keyboard cat'}));								//set session with secret
+app.use(session({secret: 'travelingtechguyisaguythattravels'}));		//set session with secret
 app.use(flash());														//use session flash, to transfer messages
 app.use(passport.initialize());											//intialize Passport middleware
 app.use(passport.session());											//Passport session support
@@ -52,16 +52,16 @@ var env = app.get('env'),
 	port = app.get('port'),
 	appName = require('./package').name;
 
-/**
-* Routes - error routes must be last!
-*/
-app.use('/', require('./routes'));
-app.use('/users', require('./routes/users')(passport));
-app.use(require('./routes/error')(env));
+// =========================================================================
+// Routes - error routes must be last!
+// =========================================================================
+app.use('/', require('./routes'));						//default router
+app.use('/users', require('./routes/users')(passport));	//user operations router - can be combined with default
+app.use(require('./routes/error')(env));				//erro pages router
 
-/**
-* Start server
-*/
+// =========================================================================
+// Start server!
+// =========================================================================
 var server = app.listen(port, function() {
 	console.log('%s (%s) listening on port %s', appName, env, port);
 });
