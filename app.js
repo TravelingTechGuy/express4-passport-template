@@ -13,17 +13,18 @@ var express = require('express'),
 	session = require('express-session'),
 	bodyParser = require('body-parser'),
 	compress = require('compression'),
+	flash = require('connect-flash'),			//session flash messages
 	methodOverride = require('method-override');
 
 //regular modules
 var path = require('path'),
-	flash = require('connect-flash'),			//session flash messages
 	passport = require('./config/passport')(),	//configure passport
 	mongoose = require('mongoose'),				//configure database
 	dbConfig = require('./config/database');	
 
-// connect to database - exit with error message on failure
+//connect to database - change if more fields are needed
 mongoose.connect(dbConfig.url);
+//abort app with error message on failure
 mongoose.connection.on('error', function(err) {
 	console.error('Mongoose connection error: ' + err.message);
 	process.exit(-1);
@@ -53,14 +54,14 @@ var env = app.get('env'),
 	appName = require('./package').name;
 
 // =========================================================================
-// Routes - error routes must be last!
+// Routes - error routes must be last! =====================================
 // =========================================================================
 app.use('/', require('./routes'));						//default router
 app.use('/users', require('./routes/users')(passport));	//user operations router - can be combined with default
 app.use(require('./routes/error')(env));				//erro pages router
 
 // =========================================================================
-// Start server!
+// Start server! ===========================================================
 // =========================================================================
 var server = app.listen(port, function() {
 	console.log('%s (%s) listening on port %s', appName, env, port);
