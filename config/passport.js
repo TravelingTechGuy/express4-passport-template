@@ -15,10 +15,10 @@ var userModel = require('../models/userModel');
 // expose this function to our app using module.exports
 module.exports = function() {
 	// =========================================================================
-	// passport session setup ==================================================
+	// Passport session setup ==================================================
 	// =========================================================================
 	// required for persistent login sessions
-	// passport needs ability to serialize and unserialize users out of session
+	// passport needs ability to serialize and deserialize users out of session
 
 	// used to serialize the user for the session
 	passport.serializeUser(function(user, done) {
@@ -37,7 +37,6 @@ module.exports = function() {
 	// =========================================================================
 	// we are using named strategies since we have one for login and one for signup
 	// by default, if there was no name, it would just be called 'local'
-
 	passport.use('local-login', new LocalStrategy({
 		// by default, local strategy uses username and password, we will override with email
 		usernameField: 'email',
@@ -76,7 +75,25 @@ module.exports = function() {
 			});
 		});
 	}));
-
+	
+	// =========================================================================
+	// LOCAL LOGOUT =============================================================
+	// =========================================================================
+	// Attempt to update the user's lastAccessed field to the time of logout
+	// Then, remove the user object from the session and log out
+	passport.logout = function(req, done) {
+		userModel.findById(req.user.id, function(err, user) {
+			//try to update last accessed time, ignore on failure;
+			if(!err) {
+				user.local.lastAccessed = new Date();
+				user.save();
+			}
+			debug('user id %s logged out', req.user.id);
+			req.logout();
+			done();
+		});
+	};
+	
 	// =========================================================================
 	// LOCAL SIGNUP ============================================================
 	// =========================================================================
@@ -125,19 +142,6 @@ module.exports = function() {
 			});    
 		});
 	}));
-	
-	passport.logout = function(req, done) {
-		userModel.findById(req.user.id, function(err, user) {
-			//try to update last accessed time, ignore on failure;
-			if(!err) {
-				user.local.lastAccessed = new Date();
-				user.save();
-			}
-			debug('user id %s logged out', req.user.id);
-			req.logout();
-			done();
-		});
-	};
 
 	return passport;
 };
