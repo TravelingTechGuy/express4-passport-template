@@ -22,6 +22,6 @@
     "morgan": "latest",
     "passport": "latest",
     "passport-local": "latest",
-    "static-favicon": "latest"
+    "serve-favicon": "latest"
   }
 }

@@ -7,7 +7,7 @@
 //express 4 and modules
 var express = require('express'),
 	app = express(),
-	favicon = require('static-favicon'),
+	favicon = require('serve-favicon'),
 	logger = require('morgan'),
 	cookieParser = require('cookie-parser'),
 	session = require('express-session'),
@@ -58,7 +58,7 @@ var env = app.get('env'),
 // =========================================================================
 app.use('/', require('./routes'));						//default router
 app.use('/users', require('./routes/users')(passport));	//user operations router - can be combined with default
-app.use(require('./routes/error')(env));				//erro pages router
+app.use(require('./routes/error')(env));				//error pages router
 
 // =========================================================================
 // Start server! ===========================================================
