@@ -135,7 +135,7 @@ module.exports = function() {
 						if (err) {
 							throw err;
 						}
-						debug('user %s signed up', user.id);
+						debug('user %s signed up', newUser.id);
 						return done(null, newUser);
 					});
 				}
